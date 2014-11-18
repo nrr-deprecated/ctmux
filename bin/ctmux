@@ -38,9 +38,7 @@ def main
 
 	i = 0
 	ARGV.each do |h|
-		puts h
 		window_command = "\'#{Flags.command} #{h}\'"
-		puts window_command
 
 		if 0 == i % Flags.modulus then
 			system [
