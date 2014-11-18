@@ -13,4 +13,6 @@ Gem::Specification.new do |s|
 	]
 	s.homepage = 'https://github.com/nrr/ctmux'
 	s.license = 'All rights reserved'
+
+	s.add_runtime_dependency 'flags'
 end
