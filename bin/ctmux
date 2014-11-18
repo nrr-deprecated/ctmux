@@ -1,7 +1,6 @@
 #! /usr/bin/env ruby
 
 require 'flags'
-require 'pp'
 
 def __set_up_flags
 	Flags.define_int(
