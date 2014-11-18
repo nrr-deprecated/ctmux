@@ -1,0 +1,75 @@
+#! /usr/bin/env ruby
+
+require 'flags'
+require 'pp'
+
+def __set_up_flags
+	Flags.define_int(
+		:modulus,
+		4,
+		'The number of splits per tmux window'
+	)
+	Flags.define_string(
+		:command,
+		'ssh',
+		'The default command to run for each split'
+	)
+	Flags.define_string(
+		:session_name,
+		"ctmux-#{Time.now.to_i.to_s(36)}",
+		'The default name of the new session to create'
+	)
+	Flags.define_string(
+		:tmux,
+		'tmux',
+		'The command to use in place of tmux'
+	)
+end
+
+def main
+	__set_up_flags
+	Flags.init
+
+	system [
+		Flags.tmux,
+		'new-session',
+		'-d',
+		"-s #{Flags.session_name}",
+	].join(' ')
+
+	i = 0
+	ARGV.each do |h|
+		puts h
+		window_command = "\'#{Flags.command} #{h}\'"
+		puts window_command
+
+		if 0 == i % Flags.modulus then
+			system [
+				Flags.tmux,
+				'new-window',
+				"-t #{Flags.session_name}",
+				window_command,
+			].join(' ')
+		else
+			system [
+				Flags.tmux,
+				'split-window',
+				'-v',
+				"-t #{Flags.session_name}",
+				window_command,
+			].join(' ')
+			system [
+				Flags.tmux,
+				'select-layout',
+				"-t #{Flags.session_name}",
+				'even-vertical',
+			].join(' ')
+		end
+
+		i += 1
+	end
+end
+
+if $0 == __FILE__ then
+	main
+end
