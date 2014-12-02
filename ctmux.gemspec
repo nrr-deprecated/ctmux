@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
 		'Nathaniel Reindl',
 	]
 	s.email = 'nrr@corvidae.org'
-	s.files = [
-		'bin/ctmux',
+	s.executables = [
+		'ctmux',
 	]
 	s.homepage = 'https://github.com/nrr/ctmux'
 	s.license = 'All rights reserved'

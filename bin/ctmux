@@ -25,48 +25,42 @@ def __set_up_flags
 	)
 end
 
-def main
-	__set_up_flags
-	Flags.init
+__set_up_flags
+Flags.init
 
-	system [
-		Flags.tmux,
-		'new-session',
-		'-d',
-		"-s #{Flags.session_name}",
-	].join(' ')
+system [
+	Flags.tmux,
+	'new-session',
+	'-d',
+	"-s #{Flags.session_name}",
+].join(' ')
 
-	i = 0
-	ARGV.each do |h|
-		window_command = "\'#{Flags.command} #{h}\'"
+i = 0
+ARGV.each do |h|
+	window_command = "\'#{Flags.command} #{h}\'"
 
-		if 0 == i % Flags.modulus then
-			system [
-				Flags.tmux,
-				'new-window',
-				"-t #{Flags.session_name}",
-				window_command,
-			].join(' ')
-		else
-			system [
-				Flags.tmux,
-				'split-window',
-				'-v',
-				"-t #{Flags.session_name}",
-				window_command,
-			].join(' ')
-			system [
-				Flags.tmux,
-				'select-layout',
-				"-t #{Flags.session_name}",
-				'even-vertical',
-			].join(' ')
-		end
-
-		i += 1
+	if 0 == i % Flags.modulus then
+		system [
+			Flags.tmux,
+			'new-window',
+			"-t #{Flags.session_name}",
+			window_command,
+		].join(' ')
+	else
+		system [
+			Flags.tmux,
+			'split-window',
+			'-v',
+			"-t #{Flags.session_name}",
+			window_command,
+		].join(' ')
+		system [
+			Flags.tmux,
+			'select-layout',
+			"-t #{Flags.session_name}",
+			'even-vertical',
+		].join(' ')
 	end
-end
 
-if $0 == __FILE__ then
-	main
+	i += 1
 end
